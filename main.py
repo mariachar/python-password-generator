@@ -3,7 +3,8 @@ from tkinter import messagebox
 from random import randint, choice, shuffle
 import pyperclip
 import json
-
+import string
+import os
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -14,7 +15,7 @@ def generate_password():
     password_entry.delete(0, END)
 
 
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    letters = list(string.ascii_letters)
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
@@ -68,6 +69,12 @@ def save():
             finally:
                 website_entry.delete(0, END)
                 password_entry.delete(0, END)
+
+            desktop_path = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop')
+            desktop_file_path = os.path.join(desktop_path, "data.txt")
+
+            with open(desktop_file_path, "w") as desktop_data_file:
+                json.dump(data, desktop_data_file, indent=4)
 
 
 # ---------------------------- Update Checkmarks ----------------------- #
@@ -148,7 +155,7 @@ gener_pass_button = Button(text="Generate Password", command=generate_password)
 gener_pass_button.grid(row=3, column=3)
 add_button = Button(text="Add", width=30, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
-search_button= Button(text="Search", width=5, height=1, command=find_password)
+search_button = Button(text="Search", width=5, height=1, command=find_password)
 search_button.place(x=315, y=200)
 
 
@@ -160,4 +167,3 @@ for entry in (website_entry, email_entry, password_entry):
 
 
 window.mainloop()
-
